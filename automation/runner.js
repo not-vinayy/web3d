@@ -7,7 +7,7 @@ const PORT = 3000;
 const HOST = `http://localhost:${PORT}`;
 
 // Settings for Academic Runs
-const NUM_RUNS = 1;
+const NUM_RUNS = 10;
 
 // Serve the app for Puppeteer
 const app = express();

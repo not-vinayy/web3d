@@ -82,7 +82,8 @@
             <div class="chart-container"><canvas id="chartB"></canvas></div>
             <div class="chart-container"><canvas id="chartC"></canvas></div>
             <div class="chart-container"><canvas id="chartD"></canvas></div>
-            <div class="chart-container"><canvas id="chartInit"></canvas></div>
+            <div class="chart-container"><canvas id="chartE"></canvas></div>
+            <div class="chart-container" style="width: 100%;"><canvas id="chartInit"></canvas></div>
         </div>
     </div>
 
@@ -150,7 +151,8 @@
         }
 
         function extractData(data, scenario, matric) {
-            const filter = data.filter(d => d.scenario === scenario && !d.error);
+            const arr = Array.isArray(data) ? data : (data.data || []);
+            const filter = arr.filter(d => d.scenario === scenario && !d.error);
             const counts = [...new Set(filter.map(d => d.count))].sort((a, b) => a - b);
 
             const webgl = counts.map(c => filter.find(d => d.api === 'webgl' && d.count === c)?.[matric] || 0);
@@ -159,27 +161,38 @@
             return { counts, webgl, webgpu };
         }
 
-        function renderCharts(data) {
+        function renderCharts(jsonData) {
             destroyCharts();
 
+            const reqData = Array.isArray(jsonData) ? jsonData : (jsonData.data || []);
+
+            if (jsonData.metadata) {
+                const header = document.querySelector('.header h1');
+                header.innerHTML = `Benchmark Results Visualization<br><span style="font-size: 0.5em; color: gray;">Hardware: ${jsonData.metadata.resolution} | Date: ${new Date(jsonData.metadata.date).toLocaleString()}</span>`;
+            }
+
             // Scenario B (Instancing) - FPS
-            const d1 = extractData(data, 'B', 'fps');
-            createChart('chartB', 'line', 'Scenario B: Geometry Scaling (FPS)', d1.counts, d1.webgl, d1.webgpu, 'Frames Per Second (FPS)');
+            const d1 = extractData(reqData, 'B', 'meanFps');
+            createChart('chartB', 'line', 'Scenario B: Geometry Scaling (Mean FPS)', d1.counts, d1.webgl, d1.webgpu, 'Frames Per Second (FPS)');
 
             // Scenario C (Particles) - FPS
-            const d2 = extractData(data, 'C', 'fps');
-            createChart('chartC', 'line', 'Scenario C: Particle System (FPS)', d2.counts, d2.webgl, d2.webgpu, 'Frames Per Second (FPS)');
+            const d2 = extractData(reqData, 'C', 'meanFps');
+            createChart('chartC', 'line', 'Scenario C: Particle System (Mean FPS)', d2.counts, d2.webgl, d2.webgpu, 'Frames Per Second (FPS)');
 
             // Scenario D (Compute) - FPS
-            const d3 = extractData(data, 'D', 'fps');
-            createChart('chartD', 'line', 'Scenario D: Matrix Multiplication (FPS)', d3.counts, d3.webgl, d3.webgpu, 'Frames Per Second (FPS)');
+            const d3 = extractData(reqData, 'D', 'meanFps');
+            createChart('chartD', 'line', 'Scenario D: Matrix Multiplication (Mean FPS)', d3.counts, d3.webgl, d3.webgpu, 'Frames Per Second (FPS)');
+
+            // Scenario E (State Change) - FPS
+            const dE = extractData(reqData, 'E', 'meanFps');
+            createChart('chartE', 'line', 'Scenario E: State Changes (Mean FPS)', dE.counts, dE.webgl, dE.webgpu, 'Frames Per Second (FPS)');
 
             // Initialization Times (Avg across all tests for each API)
-            const initWebGL = data.filter(d => d.api === 'webgl' && !d.error).map(d => d.initTime);
-            const avgInitWebGL = initWebGL.reduce((a, b) => a + b, 0) / initWebGL.length;
+            const initWebGL = reqData.filter(d => d.api === 'webgl' && !d.error).map(d => d.meanInitTime);
+            const avgInitWebGL = initWebGL.length > 0 ? initWebGL.reduce((a, b) => a + b, 0) / initWebGL.length : 0;
 
-            const initWebGPU = data.filter(d => d.api === 'webgpu' && !d.error).map(d => d.initTime);
-            const avgInitWebGPU = initWebGPU.reduce((a, b) => a + b, 0) / initWebGPU.length;
+            const initWebGPU = reqData.filter(d => d.api === 'webgpu' && !d.error).map(d => d.meanInitTime);
+            const avgInitWebGPU = initWebGPU.length > 0 ? initWebGPU.reduce((a, b) => a + b, 0) / initWebGPU.length : 0;
 
             const ctx = document.getElementById('chartInit').getContext('2d');
             charts['chartInit'] = new Chart(ctx, {
