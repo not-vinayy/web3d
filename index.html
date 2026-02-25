@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGL vs WebGPU Benchmark</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #111;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        #ui {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            pointer-events: none;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            margin: 0 0 10px 0;
+            font-size: 1.2rem;
+            color: #4db8ff;
+        }
+
+        .metric {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .value {
+            font-weight: bold;
+            color: #69db7c;
+        }
+
+        #error-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            color: #ff6b6b;
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+
+    <div id="ui">
+        <h1>Render Engine Benchmark</h1>
+        <div class="metric">API: <span id="api-label" class="value">Loading...</span></div>
+        <div class="metric">Scenario: <span id="scenario-label" class="value">Loading...</span></div>
+        <div class="metric">Items count: <span id="count-label" class="value">-</span></div>
+        <br>
+        <div class="metric">FPS: <span id="fps-value" class="value">0</span></div>
+        <div class="metric">Frame time: <span id="frametime-value" class="value">0 ms</span></div>
+        <div class="metric">Status: <span id="status-value" class="value" style="color:#ffd43b">Initializing...</span>
+        </div>
+    </div>
+
+    <div id="error-overlay"></div>
+
+    <!-- Harness handles metrics, UI updates and exposing data to Puppeteer -->
+    <script type="module" src="./metrics/Harness.js"></script>
+
+    <!-- Benchmark runner script -->
+    <script type="module" src="./scenarios/main.js"></script>
+</body>
+
+</html>

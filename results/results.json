@@ -1,0 +1,226 @@
+[
+  {
+    "api": "webgl",
+    "scenario": "A",
+    "count": 1,
+    "fps": 14056.338028169013,
+    "avgFrameTime": 0.06973947895940893,
+    "initTime": 17.199999999254942
+  },
+  {
+    "api": "webgl",
+    "scenario": "B",
+    "count": 100,
+    "fps": 11796.690307120823,
+    "avgFrameTime": 0.08276553106361735,
+    "initTime": 3
+  },
+  {
+    "api": "webgl",
+    "scenario": "B",
+    "count": 500,
+    "fps": 6653.333333333333,
+    "avgFrameTime": 0.14869739478808605,
+    "initTime": 1.699999999254942
+  },
+  {
+    "api": "webgl",
+    "scenario": "B",
+    "count": 1000,
+    "fps": 4887.365328127528,
+    "avgFrameTime": 0.20260521042009513,
+    "initTime": 2
+  },
+  {
+    "api": "webgl",
+    "scenario": "B",
+    "count": 5000,
+    "fps": 841.3421008240538,
+    "avgFrameTime": 1.1821643286580612,
+    "initTime": 2.599999999627471
+  },
+  {
+    "api": "webgl",
+    "scenario": "B",
+    "count": 10000,
+    "fps": 609.8753361028091,
+    "avgFrameTime": 1.6290581162332114,
+    "initTime": 3.300000000745058
+  },
+  {
+    "api": "webgl",
+    "scenario": "C",
+    "count": 10000,
+    "fps": 5940.476190476191,
+    "avgFrameTime": 0.16633266533066132,
+    "initTime": 5.199999999254942
+  },
+  {
+    "api": "webgl",
+    "scenario": "C",
+    "count": 50000,
+    "fps": 1645.2357401972922,
+    "avgFrameTime": 0.6038076152282212,
+    "initTime": 5.599999999627471
+  },
+  {
+    "api": "webgl",
+    "scenario": "C",
+    "count": 100000,
+    "fps": 995.411928986859,
+    "avgFrameTime": 1,
+    "initTime": 7
+  },
+  {
+    "api": "webgl",
+    "scenario": "C",
+    "count": 200000,
+    "fps": 505.72615790045285,
+    "avgFrameTime": 1.9705410821658218,
+    "initTime": 10.5
+  },
+  {
+    "api": "webgl",
+    "scenario": "D",
+    "count": 100,
+    "fps": 11213.483146067416,
+    "avgFrameTime": 0.08917835671342686,
+    "initTime": 4.300000000745058
+  },
+  {
+    "api": "webgl",
+    "scenario": "D",
+    "count": 256,
+    "fps": 14851.190476355134,
+    "avgFrameTime": 0.06733466933793081,
+    "initTime": 2.699999999254942
+  },
+  {
+    "api": "webgl",
+    "scenario": "D",
+    "count": 512,
+    "fps": 10309.917355292546,
+    "avgFrameTime": 0.09699398797669845,
+    "initTime": 2.099999999627471
+  },
+  {
+    "api": "webgl",
+    "scenario": "D",
+    "count": 1024,
+    "fps": 14763.313609142026,
+    "avgFrameTime": 0.06753507013878746,
+    "initTime": 2
+  },
+  {
+    "api": "webgpu",
+    "scenario": "A",
+    "count": 1,
+    "fps": 6092.79609276838,
+    "avgFrameTime": 0.1623246492985972,
+    "initTime": 2153.4000000003725
+  },
+  {
+    "api": "webgpu",
+    "scenario": "B",
+    "count": 100,
+    "fps": 6004.813477764585,
+    "avgFrameTime": 0.1657314629243586,
+    "initTime": 22.90000000037253
+  },
+  {
+    "api": "webgpu",
+    "scenario": "B",
+    "count": 500,
+    "fps": 4369.527145387527,
+    "avgFrameTime": 0.22725450901878264,
+    "initTime": 18.799999998882413
+  },
+  {
+    "api": "webgpu",
+    "scenario": "B",
+    "count": 1000,
+    "fps": 3166.243654829819,
+    "avgFrameTime": 0.313627254509018,
+    "initTime": 7.5
+  },
+  {
+    "api": "webgpu",
+    "scenario": "B",
+    "count": 5000,
+    "fps": 1052.0767446747125,
+    "avgFrameTime": 0.9462925851688476,
+    "initTime": 7.400000000372529
+  },
+  {
+    "api": "webgpu",
+    "scenario": "B",
+    "count": 10000,
+    "fps": 603.8238141346802,
+    "avgFrameTime": 1.6496993987961022,
+    "initTime": 5.299999998882413
+  },
+  {
+    "api": "webgpu",
+    "scenario": "C",
+    "count": 10000,
+    "fps": 5954.653937894552,
+    "avgFrameTime": 0.16773547094039065,
+    "initTime": 4.599999999627471
+  },
+  {
+    "api": "webgpu",
+    "scenario": "C",
+    "count": 50000,
+    "fps": 3823.7547892720304,
+    "avgFrameTime": 0.2613226452913277,
+    "initTime": 51.90000000037253
+  },
+  {
+    "api": "webgpu",
+    "scenario": "C",
+    "count": 100000,
+    "fps": 6137.761377557527,
+    "avgFrameTime": 0.16252505009945384,
+    "initTime": 110.69999999925494
+  },
+  {
+    "api": "webgpu",
+    "scenario": "C",
+    "count": 200000,
+    "fps": 3192.578374904807,
+    "avgFrameTime": 0.3128256513055914,
+    "initTime": 225.40000000037253
+  },
+  {
+    "api": "webgpu",
+    "scenario": "D",
+    "count": 100,
+    "fps": 7515.060240921694,
+    "avgFrameTime": 0.13266533065982955,
+    "initTime": 435.90000000037253
+  },
+  {
+    "api": "webgpu",
+    "scenario": "D",
+    "count": 256,
+    "fps": 6901.798063552666,
+    "avgFrameTime": 0.14468937875602192,
+    "initTime": 45.40000000037253
+  },
+  {
+    "api": "webgpu",
+    "scenario": "D",
+    "count": 512,
+    "fps": 6863.823934045584,
+    "avgFrameTime": 0.1454909819631813,
+    "initTime": 39.09999999962747
+  },
+  {
+    "api": "webgpu",
+    "scenario": "D",
+    "count": 1024,
+    "fps": 6743.243243243243,
+    "avgFrameTime": 0.14809619238551608,
+    "initTime": 41.899999998509884
+  }
+]
