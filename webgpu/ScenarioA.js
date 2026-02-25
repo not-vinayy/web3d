@@ -86,6 +86,8 @@ export default class ScenarioA_WebGPU extends Scenario {
             alphaMode: 'opaque'
         });
 
+        await this.harness.initWebGPUTimestamps(this.device);
+
         // Create buffers
         this.vertexBuffer = this.createBuffer(CubeData.positions, GPUBufferUsage.VERTEX);
         this.normalBuffer = this.createBuffer(CubeData.normals, GPUBufferUsage.VERTEX);
@@ -199,6 +201,9 @@ export default class ScenarioA_WebGPU extends Scenario {
         this.device.queue.writeBuffer(this.uniformBuffer, 0, this.uniformData);
 
         const commandEncoder = this.device.createCommandEncoder();
+
+        this.harness.beginGPUTimestamp(commandEncoder);
+
         const renderPass = commandEncoder.beginRenderPass({
             colorAttachments: [{
                 view: this.context.getCurrentTexture().createView(),
@@ -222,6 +227,10 @@ export default class ScenarioA_WebGPU extends Scenario {
         renderPass.drawIndexed(CubeData.indices.length);
         renderPass.end();
 
+        this.harness.endGPUTimestamp(commandEncoder);
+
         this.device.queue.submit([commandEncoder.finish()]);
+
+        return this.harness.resolveGPUTimestamp();
     }
 }

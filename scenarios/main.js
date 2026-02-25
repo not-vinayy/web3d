@@ -13,24 +13,24 @@ const harness = new BenchmarkHarness();
 
 async function loadScenario() {
     try {
-        let ScenarioClass;
-
-        if (api === 'webgl') {
-            const module = await import(`../webgl/Scenario${scenarioName}.js`);
-            ScenarioClass = module.default;
-        } else if (api === 'webgpu') {
-            const module = await import(`../webgpu/Scenario${scenarioName}.js`);
-            ScenarioClass = module.default;
-        } else {
-            throw new Error(`Unknown API: ${api}`);
-        }
-
         const canvas = document.getElementById('canvas');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        const scenario = new ScenarioClass(canvas, harness);
+        let scenario;
+        if (api === 'webgl') {
+            const module = await import(`../webgl/Scenario${scenarioName}.js`);
+            scenario = new module.default(canvas, harness);
+        } else if (api === 'webgpu') {
+            const module = await import(`../webgpu/Scenario${scenarioName}.js`);
+            scenario = new module.default(canvas, harness);
+        } else {
+            throw new Error(`Unknown API: ${api}`);
+        }
+
         scenario.count = count;
+        harness.startInitTimer();
+        await scenario.init();
 
         scenario.start();
 

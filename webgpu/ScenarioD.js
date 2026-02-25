@@ -58,6 +58,7 @@ export default class ScenarioD_WebGPU extends Scenario {
             device: this.device,
             format: navigator.gpu.getPreferredCanvasFormat()
         });
+        await this.harness.initWebGPUTimestamps(this.device);
 
         // 2 metadata floats (size) + size*size floats
         const elementCount = 2 + this.size * this.size;
@@ -117,6 +118,8 @@ export default class ScenarioD_WebGPU extends Scenario {
     async render() {
         const commandEncoder = this.device.createCommandEncoder();
 
+        this.harness.beginGPUTimestamp(commandEncoder);
+
         const passEncoder = commandEncoder.beginComputePass();
         passEncoder.setPipeline(this.computePipeline);
         passEncoder.setBindGroup(0, this.bindGroup);
@@ -134,6 +137,10 @@ export default class ScenarioD_WebGPU extends Scenario {
         });
         renderPass.end();
 
+        this.harness.endGPUTimestamp(commandEncoder);
+
         this.device.queue.submit([commandEncoder.finish()]);
+
+        return this.harness.resolveGPUTimestamp();
     }
 }

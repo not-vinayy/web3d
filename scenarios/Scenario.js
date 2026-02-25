@@ -22,14 +22,8 @@ export class Scenario {
 
     start() {
         this.isRunning = true;
-        this.harness.startInitTimer();
-        this.init().then(() => {
-            this.harness.endInitTimer();
-            this.run();
-        }).catch(err => {
-            console.error("Scenario Initialization Failed:", err);
-            this.harness.reportError(err.message || err.toString());
-        });
+        this.harness.endInitTimer();
+        this.run();
     }
 
     run() {

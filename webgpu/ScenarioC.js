@@ -123,6 +123,8 @@ export default class ScenarioC_WebGPU extends Scenario {
             alphaMode: 'opaque'
         });
 
+        await this.harness.initWebGPUTimestamps(this.device);
+
         // Initialize particle data (32 bytes per particle: vec2 pos, vec2 vel, vec4 color)
         const initialData = new Float32Array(this.count * 8);
         const w = this.canvas.width;
@@ -226,6 +228,8 @@ export default class ScenarioC_WebGPU extends Scenario {
     async render() {
         const commandEncoder = this.device.createCommandEncoder();
 
+        this.harness.beginGPUTimestamp(commandEncoder);
+
         // Compute pass
         const computePass = commandEncoder.beginComputePass();
         computePass.setPipeline(this.computePipeline);
@@ -249,6 +253,10 @@ export default class ScenarioC_WebGPU extends Scenario {
         renderPass.draw(4, this.count, 0, 0);
         renderPass.end();
 
+        this.harness.endGPUTimestamp(commandEncoder);
+
         this.device.queue.submit([commandEncoder.finish()]);
+
+        return this.harness.resolveGPUTimestamp();
     }
 }
