@@ -1,0 +1,93 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{evans2014webgl,cabello2010threejs}
+\citation{khronos2017webgl2}
+\citation{sellers2016vulkan}
+\citation{cabello2010threejs}
+\citation{w3c2024webgpu}
+\citation{sellers2016vulkan}
+\citation{microsoft2015dx12}
+\citation{apple2014metal}
+\citation{nickolls2010gpu}
+\citation{khronos2017webgl2}
+\citation{sellers2016vulkan}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{section.1}\protected@file@percent }
+\newlabel{sec:introduction}{{I}{1}{Introduction}{section.1}{}}
+\citation{w3c2024webgpu}
+\citation{beaufort2023webgpu}
+\citation{w3c2024wgsl}
+\citation{kessenich2018opengl}
+\citation{sellers2016vulkan}
+\citation{evans2014webgl}
+\citation{beaufort2023webgpu}
+\citation{puppeteer2024}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Background and Related Work}{2}{section.2}\protected@file@percent }
+\newlabel{sec:background}{{II}{2}{Background and Related Work}{section.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}WebGL 2.0}{2}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}WebGPU}{2}{subsection.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-C}}Related Benchmarking Studies}{2}{subsection.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {III}Methodology}{2}{section.3}\protected@file@percent }
+\newlabel{sec:methodology}{{III}{2}{Methodology}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Benchmarking Framework Architecture}{2}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Benchmark Scenarios}{2}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-B}1}Scenario A --- Baseline Rendering}{2}{subsubsection.3.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-B}2}Scenario B --- Geometry Scaling (Instanced Rendering)}{2}{subsubsection.3.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-B}3}Scenario C --- Particle System (Compute vs. CPU Physics)}{2}{subsubsection.3.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-B}4}Scenario D --- GPGPU Matrix Multiplication}{2}{subsubsection.3.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-B}5}Scenario E --- State-Change Stress Test}{3}{subsubsection.3.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Metrics Collected}{3}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Experimental Setup}{3}{section.4}\protected@file@percent }
+\newlabel{sec:experimental}{{IV}{3}{Experimental Setup}{section.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Results}{3}{section.5}\protected@file@percent }
+\newlabel{sec:results}{{V}{3}{Results}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Scenario A: Baseline Rendering}{3}{subsection.5.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Scenario A --- Baseline Rendering (Single Cube)}}{3}{table.1}\protected@file@percent }
+\newlabel{tab:scenario_a}{{I}{3}{Scenario A --- Baseline Rendering (Single Cube)}{table.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Scenario B --- Instanced Geometry Scaling (Mean FPS)}}{3}{table.2}\protected@file@percent }
+\newlabel{tab:scenario_b}{{II}{3}{Scenario B --- Instanced Geometry Scaling (Mean FPS)}{table.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Scenario B: Instanced Geometry Scaling}{3}{subsection.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Scenario C: Particle System}{3}{subsection.5.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Scenario C --- Particle System}}{3}{table.3}\protected@file@percent }
+\newlabel{tab:scenario_c}{{III}{3}{Scenario C --- Particle System}{table.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Scenario B: Mean FPS vs. instance count (log scale). WebGPU overtakes WebGL beyond 200 instances and maintains a substantial advantage up to 10{,}000 instances.}}{3}{figure.1}\protected@file@percent }
+\newlabel{fig:scenario_b_fps}{{1}{3}{Scenario B: Mean FPS vs. instance count (log scale). WebGPU overtakes WebGL beyond 200 instances and maintains a substantial advantage up to 10{,}000 instances}{figure.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Scenario C: CPU time scaling comparison. WebGL CPU time grows linearly with particle count ($O(n)$), while WebGPU compute shader overhead remains nearly constant ($<$0.6~ms).}}{4}{figure.2}\protected@file@percent }
+\newlabel{fig:scenario_c_cpu}{{2}{4}{Scenario C: CPU time scaling comparison. WebGL CPU time grows linearly with particle count ($O(n)$), while WebGPU compute shader overhead remains nearly constant ($<$0.6~ms)}{figure.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-D}}Scenario D: GPGPU Matrix Multiplication}{4}{subsection.5.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces Scenario D --- Matrix Multiplication Performance}}{4}{table.4}\protected@file@percent }
+\newlabel{tab:scenario_d}{{IV}{4}{Scenario D --- Matrix Multiplication Performance}{table.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-E}}Scenario E: State-Change Stress Test}{4}{subsection.5.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {V}{\ignorespaces Scenario E --- State-Change Stress Test}}{4}{table.5}\protected@file@percent }
+\newlabel{tab:scenario_e}{{V}{4}{Scenario E --- State-Change Stress Test}{table.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Scenario E: Mean FPS under per-object state changes. WebGPU's performance degrades rapidly, falling to 5.94 FPS at 10{,}000 objects vs. WebGL's 80.78 FPS.}}{4}{figure.3}\protected@file@percent }
+\newlabel{fig:scenario_e}{{3}{4}{Scenario E: Mean FPS under per-object state changes. WebGPU's performance degrades rapidly, falling to 5.94 FPS at 10{,}000 objects vs. WebGL's 80.78 FPS}{figure.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-F}}Initialization Time Comparison}{4}{subsection.5.6}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {VI}{\ignorespaces Mean Initialization Time (ms) Across Scenarios}}{4}{table.6}\protected@file@percent }
+\newlabel{tab:init_time}{{VI}{4}{Mean Initialization Time (ms) Across Scenarios}{table.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Discussion}{4}{section.6}\protected@file@percent }
+\newlabel{sec:discussion}{{VI}{4}{Discussion}{section.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}When WebGPU Excels}{4}{subsection.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}When WebGL Remains Competitive}{5}{subsection.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}Initialization Overhead}{5}{subsection.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-D}}State-Change Pattern Analysis}{5}{subsection.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-E}}Threats to Validity}{5}{subsection.6.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Conclusion and Future Work}{5}{section.7}\protected@file@percent }
+\newlabel{sec:conclusion}{{VII}{5}{Conclusion and Future Work}{section.7}{}}
+\bibstyle{IEEEtran}
+\bibdata{references}
+\bibcite{evans2014webgl}{1}
+\bibcite{cabello2010threejs}{2}
+\bibcite{khronos2017webgl2}{3}
+\bibcite{sellers2016vulkan}{4}
+\bibcite{w3c2024webgpu}{5}
+\bibcite{microsoft2015dx12}{6}
+\bibcite{apple2014metal}{7}
+\bibcite{nickolls2010gpu}{8}
+\bibcite{beaufort2023webgpu}{9}
+\bibcite{w3c2024wgsl}{10}
+\bibcite{kessenich2018opengl}{11}
+\bibcite{puppeteer2024}{12}
+\@writefile{toc}{\contentsline {section}{References}{6}{section*.2}\protected@file@percent }
+\gdef \@abspage@last{6}
