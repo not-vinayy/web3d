@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.12.24)  26 FEB 2026 12:22
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.12.24)  26 FEB 2026 12:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -857,50 +857,61 @@ File: tikzlibraryplotmarks.code.tex 2023-01-15 v3.1.10 (3.1.10)
 (/usr/local/texlive/2025basic/texmf-dist/tex/generic/pgf/libraries/pgflibrarypl
 otmarks.code.tex
 File: pgflibraryplotmarks.code.tex 2023-01-15 v3.1.10 (3.1.10)
-))) (/Users/mac/Library/texmf/tex/latex/preprint/balance.sty
+)))
+(/Users/mac/Library/texmf/tex/generic/pgfplots/libs/tikzlibrarypgfplots.grouppl
+ots.code.tex
+\pgfplots@group@current@plot=\count352
+\pgfplots@group@current@row=\count353
+\pgfplots@group@current@column=\count354
+
+(/usr/local/texlive/2025basic/texmf-dist/tex/generic/pgf/frontendlayer/tikz/lib
+raries/tikzlibrarycalc.code.tex
+File: tikzlibrarycalc.code.tex 2023-01-15 v3.1.10 (3.1.10)
+))
+(/Users/mac/Library/texmf/tex/latex/preprint/balance.sty
 Package: balance 1999/02/23 4.3 (PWD)
 \oldvsize=\dimen321
 )
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/l3backend/l3backend-pdftex.d
 ef
 File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count352
+\l__color_backend_stack_int=\count355
 \l__pdf_internal_box=\box78
 ) (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
 
 -- Lines per column: 56 (exact).
 (/usr/local/texlive/2025basic/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count353
+\scratchcounter=\count356
 \scratchdimen=\dimen322
 \scratchbox=\box79
-\nofMPsegments=\count354
-\nofMParguments=\count355
+\nofMPsegments=\count357
+\nofMParguments=\count358
 \everyMPshowfont=\toks41
-\MPscratchCnt=\count356
+\MPscratchCnt=\count359
 \MPscratchDim=\dimen323
-\MPnumerator=\count357
-\makeMPintoPDFobject=\count358
+\MPnumerator=\count360
+\makeMPintoPDFobject=\count361
 \everyMPtoPDFconversion=\toks42
 )
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.s
@@ -913,7 +924,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Package hyperref Info: Link coloring OFF on input line 24.
+Package hyperref Info: Link coloring OFF on input line 25.
  (./main.out) (./main.out)
 \@outlinefile=\write4
 \openout4 = `main.out'.
@@ -923,17 +934,17 @@ Package pgfplots notification 'compat/show suggested version=true': document ha
 s been generated with the most recent feature set (\pgfplotsset{compat=1.18}).
 
 LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 3
-7.
+8.
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 39.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 40.
 
 
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 39.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 40.
 
 
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -949,136 +960,148 @@ usr/local/texlive/2025basic/texmf-dist/fonts/enc/dvips/base/8r.enc}
 ]
 
 
-Underfull \hbox (badness 6094) in paragraph at lines 93--94
+Underfull \hbox (badness 6094) in paragraph at lines 94--95
 []\OT1/ptm/b/n/10 Metrics Har-ness\OT1/ptm/m/n/10 : A \OT1/pcr/m/n/10 Benchmark
 Harness \OT1/ptm/m/n/10 class
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 93--94
+Underfull \hbox (badness 10000) in paragraph at lines 94--95
 \OT1/ptm/m/n/10 that man-ages tim-ing with a 1-second warmup
  []
 
 
-Underfull \hbox (badness 2269) in paragraph at lines 93--94
+Underfull \hbox (badness 2269) in paragraph at lines 94--95
 \OT1/ptm/m/n/10 phase fol-lowed by a 3-second ac-tive mea-sure-ment
  []
 
 
-Underfull \hbox (badness 2142) in paragraph at lines 93--94
+Underfull \hbox (badness 2142) in paragraph at lines 94--95
 \OT1/ptm/m/n/10 win-dow. The har-ness records per-frame times-tamps
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 93--94
+Underfull \hbox (badness 10000) in paragraph at lines 94--95
 \OT1/ptm/m/n/10 us-ing \OT1/pcr/m/n/10 performance.now()\OT1/ptm/m/n/10 , mea-s
 ures CPU
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 93--94
+Underfull \hbox (badness 10000) in paragraph at lines 94--95
 \OT1/ptm/m/n/10 time via \OT1/pcr/m/n/10 performance.mark/measure\OT1/ptm/m/n/1
 0 , and
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 94--95
+Underfull \hbox (badness 10000) in paragraph at lines 95--96
 []\OT1/ptm/b/n/10 Automation Run-ner\OT1/ptm/m/n/10 : A Node.js script us-ing
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 94--95
+Underfull \hbox (badness 10000) in paragraph at lines 95--96
 \OT1/ptm/m/n/10 Pup-peteer [[]12[]] to launch head-less Chromium
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 94--95
+Underfull \hbox (badness 10000) in paragraph at lines 95--96
 \OT1/ptm/m/n/10 with \OT1/pcr/m/n/10 --enable-unsafe-webgpu \OT1/ptm/m/n/10 and
 
  []
 
 
-Underfull \hbox (badness 4779) in paragraph at lines 112--113
+Underfull \hbox (badness 4779) in paragraph at lines 113--114
  \OT1/ptm/m/it/10 4) Sce-nario D --- GPGPU Ma-trix Mul-ti-pli-ca-tion: [][][]
  []
 
 
-Underfull \hbox (badness 1515) in paragraph at lines 112--113
+Underfull \hbox (badness 1515) in paragraph at lines 113--114
 \OT1/pcr/m/n/10 count \OT1/ptm/m/n/10 pa-ram-e-ter, up to 1024$\OMS/cmsy/m/n/10
  ^^B$\OT1/ptm/m/n/10 1024) is per-formed us-
  []
 
 
-Underfull \hbox (badness 4726) in paragraph at lines 112--113
+Underfull \hbox (badness 4726) in paragraph at lines 113--114
 \OT1/ptm/m/n/10 ing na-tive com-pute shaders in We-bGPU (\OT1/pcr/m/n/10 @compu
 te
  []
 
 
-Underfull \hbox (badness 2221) in paragraph at lines 112--113
+Underfull \hbox (badness 2221) in paragraph at lines 113--114
 \OT1/ptm/m/n/10 attached tex-ture). This sce-nario com-pares com-pu-ta-tional
  []
 
 
 
 [2]
-Underfull \hbox (badness 1975) in paragraph at lines 134--135
+Underfull \hbox (badness 1975) in paragraph at lines 135--136
 []\OT1/ptm/m/n/10 All bench-marks were ex-e-cuted on a sys-tem run-ning
  []
 
 
-Underfull \hbox (badness 4967) in paragraph at lines 134--135
+Underfull \hbox (badness 4967) in paragraph at lines 135--136
 \OT1/ptm/m/n/10 less Chromium browser (ver-sion 145.0.0.0). The ren-
  []
 
 
-Underfull \hbox (badness 5878) in paragraph at lines 134--135
+Underfull \hbox (badness 5878) in paragraph at lines 135--136
 \OT1/ptm/m/n/10 der-ing res-o-lu-tion was fixed at 1280$\OMS/cmsy/m/n/10 ^^B$\O
 T1/ptm/m/n/10 720 pix-els. V-
  []
 
 
-Underfull \hbox (badness 3724) in paragraph at lines 134--135
+Underfull \hbox (badness 3724) in paragraph at lines 135--136
 \OT1/ptm/m/n/10 Sync was dis-abled via \OT1/pcr/m/n/10 --disable-gpu-vsync \OT1
 /ptm/m/n/10 and
  []
 
 
-Underfull \hbox (badness 1859) in paragraph at lines 134--135
+Underfull \hbox (badness 1859) in paragraph at lines 135--136
 \OT1/pcr/m/n/10 --disable-frame-rate-limit \OT1/ptm/m/n/10 flags to en-able un-
 
  []
 
-Package pgfplots info on input line 207: Using 'lua backend=false' for axis: xm
+Package pgfplots info on input line 208: Using 'lua backend=false' for axis: xm
 ode=log unsupported (yet).
 
 
-Package pgfplots info on input line 271: Using 'lua backend=false' for axis: xm
+Package pgfplots info on input line 272: Using 'lua backend=false' for axis: xm
 ode=log unsupported (yet).
 
 
 [3]
-Package pgfplots info on input line 357: Using 'lua backend=false' for axis: xm
+Package pgfplots info on input line 343: Using 'lua backend=false' for axis: xm
+ode=log unsupported (yet).
+Package pgfplots info on input line 361: Using 'lua backend=false' for axis: xm
+ode=log unsupported (yet).
+Package pgfplots info on input line 361: Using 'lua backend=false' for axis: ym
+ode=log unsupported (yet).
+Package pgfplots info on input line 416: Using 'lua backend=false' for axis: xm
 ode=log unsupported (yet).
 
 
+Package pgfplots info on input line 478: Using 'lua backend=false' for axis: ym
+ode=log unsupported (yet).
+Package pgfplots info on input line 478: Using 'lua backend=false' for axis: x 
+coord trafo unsupported.
 
 
 [4]
-Underfull \hbox (badness 1558) in paragraph at lines 420--421
+
+
+Underfull \hbox (badness 1558) in paragraph at lines 522--523
 \OT1/ptm/m/n/10 the work-load is purely GPU-compute-bound, both APIs
  []
 
 
-
-
-Underfull \hbox (badness 1442) in paragraph at lines 437--438
+Underfull \hbox (badness 1442) in paragraph at lines 539--540
 \OT1/ptm/m/n/10 Per-for-mance char-ac-ter-is-tics may change sig-nif-i-cantly
  []
 
 
 
-[5] (./main.bbl)
+[5] (./main.bbl
+
+)
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -1093,6 +1116,8 @@ Before submitting the final camera ready copy, remember to:
 
 
 
+Package balance Warning: You have called \balance in second column
+(balance)                Columns might not be balanced.
 
 [6] (./main.aux)
  ***********
@@ -1103,31 +1128,32 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 46BDA3079FF19596BE30408FCC6835A8;5748.
  ) 
 Here is how much of TeX's memory you used:
- 35031 strings out of 474662
- 845877 string characters out of 5751108
- 1350888 words of memory out of 5000000
- 57492 multiletter control sequences out of 15000+600000
+ 35409 strings out of 474662
+ 857224 string characters out of 5751108
+ 1369888 words of memory out of 5000000
+ 57862 multiletter control sequences out of 15000+600000
  603400 words of font info for 120 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
- 99i,19n,101p,1585b,2242s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,19n,101p,1585b,2486s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi1
 0.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/c
 mmi8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/c
 m/cmr10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmr8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmsy10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmsy7.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1
-/urw/courier/ucrr8a.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/ur
-w/times/utmb8a.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/urw/tim
-es/utmbi8a.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/urw/times/u
-tmr8a.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/urw/times/utmri8
-a.pfb>
-Output written on main.pdf (6 pages, 183111 bytes).
+s/cm/cmr7.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmr8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmsy10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/typ
+e1/urw/courier/ucrr8a.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/
+urw/times/utmb8a.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/urw/t
+imes/utmbi8a.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/urw/times
+/utmr8a.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/urw/times/utmr
+i8a.pfb>
+Output written on main.pdf (6 pages, 196496 bytes).
 PDF statistics:
- 311 PDF objects out of 1000 (max. 8388607)
- 274 compressed objects within 3 object streams
- 68 named destinations out of 1000 (max. 500000)
+ 318 PDF objects out of 1000 (max. 8388607)
+ 279 compressed objects within 3 object streams
+ 70 named destinations out of 1000 (max. 500000)
  253 words of extra memory for PDF output out of 10000 (max. 10000000)
 
