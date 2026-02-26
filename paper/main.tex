@@ -1,0 +1,473 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+% Packages
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{siunitx}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tikz}
+\usepackage{balance}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{A Comparative Performance Analysis of WebGL~2.0 and WebGPU for Real-Time Browser-Based 3D Rendering and General-Purpose GPU Computing}
+
+\author{
+\IEEEauthorblockN{Vinay N}
+\IEEEauthorblockA{
+Department of Computer Science\\
+\textit{Independent Research}\\
+Email: \texttt{vinay@example.com}}
+}
+
+\maketitle
+
+\begin{abstract}
+The evolution of web-based graphics APIs has reached an inflection point with the emergence of WebGPU as a successor to the long-established WebGL standard. This paper presents a rigorous, automated benchmarking study comparing WebGL~2.0 and WebGPU across five carefully designed rendering and compute scenarios: baseline rendering overhead, instanced geometry scaling, particle system simulation, general-purpose GPU (GPGPU) matrix multiplication, and per-object state-change stress testing. All experiments were conducted using a custom-built, open-source benchmarking framework with Puppeteer-based automation, ensuring statistical repeatability through 10 independent runs per configuration at a fixed 1280$\times$720 resolution with V-Sync disabled. Our results reveal that WebGPU delivers superior frame throughput in geometry-intensive workloads, achieving up to 2.34$\times$ higher FPS than WebGL at 1{,}000 instanced cubes, while simultaneously reducing CPU-side overhead by 77\% in particle simulations at 200{,}000 particles. However, WebGPU exhibits substantially higher initialization latency---up to 17.3$\times$ for baseline scenarios---and demonstrates significantly degraded performance in state-change-heavy rendering patterns, dropping to as low as 5.94 FPS versus WebGL's 80.78 FPS at 10{,}000 objects. These findings provide empirically grounded guidance for developers evaluating migration from WebGL to WebGPU, identifying the workload characteristics under which each API excels.
+\end{abstract}
+
+\begin{IEEEkeywords}
+WebGL, WebGPU, GPU computing, browser-based rendering, performance benchmarking, real-time graphics, compute shaders, GPGPU
+\end{IEEEkeywords}
+
+%----------------------------------------------------------------------
+\section{Introduction}
+\label{sec:introduction}
+
+Browser-based 3D graphics have become a cornerstone of modern web applications, powering interactive visualizations, browser games, virtual reality experiences, data-driven dashboards, and scientific simulations~\cite{evans2014webgl, cabello2010threejs}. For over a decade, WebGL---first standardized by the Khronos Group in 2011 and later updated to WebGL~2.0 in 2017---has served as the dominant API for hardware-accelerated rendering in the browser~\cite{khronos2017webgl2}. Built atop OpenGL ES, WebGL provides a well-understood programming model with broad compatibility across desktop and mobile platforms.
+
+However, WebGL's architecture inherits fundamental limitations from its OpenGL ES lineage. Its single-threaded, immediate-mode state machine model incurs significant CPU overhead for every draw call, texture binding, and uniform update~\cite{sellers2016vulkan}. As web applications demand increasingly complex scenes with thousands of independently rendered objects, WebGL's per-draw-call overhead becomes a critical bottleneck. Furthermore, WebGL lacks native support for general-purpose GPU computing (GPGPU), forcing developers to resort to workarounds such as rendering to floating-point textures, which adds programming complexity and reduces efficiency~\cite{cabello2010threejs}.
+
+WebGPU, developed by the W3C GPU for the Web Community Group, represents a paradigm shift in browser-based graphics~\cite{w3c2024webgpu}. Inspired by modern, low-overhead native APIs---including Vulkan~\cite{sellers2016vulkan}, Direct3D~12~\cite{microsoft2015dx12}, and Metal~\cite{apple2014metal}---WebGPU introduces explicit resource management, pipeline state objects, command buffer recording, and first-class compute shader support. These architectural changes promise reduced driver overhead, improved multi-threading potential, and native GPGPU capabilities.
+
+Despite the theoretical advantages of WebGPU, the question of practical, measurable performance differences under controlled conditions remains insufficiently studied. Existing comparisons are often anecdotal, rely on single benchmarks, or fail to account for statistical variance across runs~\cite{nickolls2010gpu}. This paper addresses this gap by presenting a comprehensive, automated benchmarking study that:
+
+\begin{enumerate}
+    \item Designs five distinct benchmark scenarios isolating different aspects of GPU and API performance (Section~\ref{sec:methodology}).
+    \item Employs rigorous experimental methodology with automated browser-based test execution, 10 repeated runs per configuration, and statistical aggregation including standard deviation and 95th-percentile latency metrics (Section~\ref{sec:experimental}).
+    \item Presents detailed quantitative results comparing mean FPS, frame time, CPU time, and initialization latency across both APIs (Section~\ref{sec:results}).
+    \item Analyzes the conditions under which each API excels or underperforms, providing actionable guidance for web developers and researchers (Section~\ref{sec:discussion}).
+\end{enumerate}
+
+%----------------------------------------------------------------------
+\section{Background and Related Work}
+\label{sec:background}
+
+\subsection{WebGL 2.0}
+
+WebGL~2.0 is a JavaScript API that exposes OpenGL ES~3.0 functionality within the browser~\cite{khronos2017webgl2}. It operates through an \texttt{HTMLCanvasElement}, providing a rendering context that supports vertex and fragment shaders written in GLSL ES~3.00, vertex array objects (VAOs), instanced drawing, multiple render targets, and floating-point textures. WebGL~2.0 follows a stateful, immediate-mode programming model: developers set global state (active program, bound textures, blend mode) and issue draw calls that execute against this state. While this model is conceptually straightforward, it requires the browser and driver to perform extensive validation on each state change and draw call, incurring CPU-side overhead that becomes significant at high draw-call counts~\cite{sellers2016vulkan}.
+
+\subsection{WebGPU}
+
+WebGPU is a new web standard~\cite{w3c2024webgpu} designed to provide modern, low-overhead access to GPU hardware. Unlike WebGL, WebGPU uses an explicit programming model where resources (buffers, textures, samplers) are created independently and composed into immutable \textit{bind groups}. Rendering and compute configurations are encapsulated in pre-validated \textit{pipeline state objects}, eliminating per-draw-call validation overhead at runtime. Commands are recorded into \textit{command buffers} that are submitted to the GPU queue as atomic units, enabling efficient batching and potential multi-threaded command encoding~\cite{beaufort2023webgpu}.
+
+A distinguishing feature of WebGPU is native compute shader support through the WebGPU Shading Language (WGSL)~\cite{w3c2024wgsl}. Compute shaders enable direct GPU-parallel algorithms without the overhead of configuring a rendering pipeline---a capability that WebGL can only approximate through GPGPU techniques involving render-to-texture passes.
+
+\subsection{Related Benchmarking Studies}
+
+Prior work on GPU API benchmarking has primarily focused on native APIs. Kessenich et al.~\cite{kessenich2018opengl} provided foundational comparisons between OpenGL and Vulkan draw-call overhead. Sellers~\cite{sellers2016vulkan} demonstrated Vulkan's advantages for multi-threaded rendering. In the web context, Evans~\cite{evans2014webgl} characterized WebGL performance for scientific visualization. However, systematic comparisons between WebGL and WebGPU using controlled browser-automated benchmarks with statistical rigor remain scarce. Beaufort~\cite{beaufort2023webgpu} provided an overview of WebGPU capabilities but did not present quantitative performance data. Our work fills this gap with a multi-scenario, multi-metric benchmarking framework.
+
+%----------------------------------------------------------------------
+\section{Methodology}
+\label{sec:methodology}
+
+\subsection{Benchmarking Framework Architecture}
+
+We developed a custom open-source benchmarking framework consisting of the following components:
+
+\begin{itemize}
+    \item \textbf{Scenario Engine}: A base \texttt{Scenario} class providing standardized initialization, render-loop management via \texttt{requestAnimationFrame}, and harness integration. Each benchmark scenario extends this class with API-specific (\texttt{WebGL} or \texttt{WebGPU}) implementations.
+    \item \textbf{Metrics Harness}: A \texttt{BenchmarkHarness} class that manages timing with a 1-second warmup phase followed by a 3-second active measurement window. The harness records per-frame timestamps using \texttt{performance.now()}, measures CPU time via \texttt{performance.mark/measure}, and optionally captures GPU timestamps using WebGPU's \texttt{timestamp-query} feature.
+    \item \textbf{Automation Runner}: A Node.js script using Puppeteer~\cite{puppeteer2024} to launch headless Chromium with \texttt{--enable-unsafe-webgpu} and \texttt{--disable-frame-rate-limit} flags, iterate over the full test matrix, and collect results programmatically.
+    \item \textbf{Shared Math Library}: A minimal, dependency-free matrix library providing \texttt{mat4} operations (perspective projection, translation, rotation) used identically by both API implementations, ensuring computational parity.
+\end{itemize}
+
+\subsection{Benchmark Scenarios}
+
+Five benchmark scenarios were designed to isolate distinct performance characteristics:
+
+\subsubsection{Scenario A --- Baseline Rendering}
+A single textured, lit, rotating cube is rendered to measure the minimum per-frame overhead of each API, including context setup, shader dispatch, and frame submission. This scenario establishes the performance floor.
+
+\subsubsection{Scenario B --- Geometry Scaling (Instanced Rendering)}
+Between 100 and 10{,}000 cubes are rendered using hardware-instanced rendering (\texttt{drawElementsInstanced} in WebGL; \texttt{renderPass.drawIndexed} with instance count in WebGPU). Each frame updates per-instance transformation matrices (translation + rotation) and uploads them to GPU buffers. This scenario measures how each API handles increasing vertex and instance throughput.
+
+\subsubsection{Scenario C --- Particle System (Compute vs. CPU Physics)}
+A particle simulation with counts ranging from 10{,}000 to 200{,}000 particles tests data-parallel computation. In WebGPU, particle positions and velocities are updated entirely on the GPU using a compute shader dispatched with 64-thread workgroups. In WebGL, the same physics simulation runs on the CPU via \texttt{Float32Array} manipulation, with updated positions uploaded to the GPU each frame via \texttt{bufferSubData}. This scenario directly isolates the compute advantage of WebGPU.
+
+\subsubsection{Scenario D --- GPGPU Matrix Multiplication}
+Square matrix multiplication (dimensions derived from the \texttt{count} parameter, up to 1024$\times$1024) is performed using native compute shaders in WebGPU (\texttt{@compute @workgroup\_size(8,8)} dispatched over the matrix dimensions) and GPGPU techniques in WebGL (fragment shader reads from two \texttt{R32F} textures, writes to a framebuffer-attached texture). This scenario compares computational throughput for a purely compute-bound workload.
+
+\subsubsection{Scenario E --- State-Change Stress Test}
+Between 500 and 10{,}000 objects are rendered without instancing, requiring per-object uniform updates (model-view matrix and color) and individual draw calls. In WebGL, this means per-object \texttt{uniformMatrix4fv} and \texttt{drawElements} calls. In WebGPU, each object requires a separate bind group and draw call within the render pass. This scenario measures the overhead of API state changes at scale.
+
+\subsection{Metrics Collected}
+
+For each test configuration (API $\times$ Scenario $\times$ Count), the following metrics are collected over 10 independent runs:
+
+\begin{itemize}
+    \item \textbf{Mean FPS}: Average frames per second during the 3-second measurement window.
+    \item \textbf{FPS Standard Deviation ($\sigma_{\text{FPS}}$)}: Inter-run variability.
+    \item \textbf{Mean Frame Time}: Average time per frame in milliseconds.
+    \item \textbf{95th Percentile Frame Time (P95)}: Tail latency metric capturing worst-case frame times.
+    \item \textbf{Mean CPU Time}: Average JavaScript/CPU execution time per frame.
+    \item \textbf{Mean Initialization Time}: Time from context creation to first frame.
+\end{itemize}
+
+%----------------------------------------------------------------------
+\section{Experimental Setup}
+\label{sec:experimental}
+
+All benchmarks were executed on a system running Windows~10 (64-bit), using a Puppeteer-controlled headless Chromium browser (version~145.0.0.0). The rendering resolution was fixed at 1280$\times$720 pixels. V-Sync was disabled via \texttt{--disable-gpu-vsync} and \texttt{--disable-frame-rate-limit} flags to enable uncapped frame rate measurement.
+
+Each test configuration was executed 10 times (\texttt{NUM\_RUNS = 10}) with a per-run timeout of 120 seconds. The benchmark harness enforced a 1-second warmup period (discarded frames) followed by a 3-second active recording period. Results were aggregated into mean, standard deviation, and P95 statistics across the 10 runs.
+
+The test matrix comprised 2 APIs $\times$ 18 unique (Scenario, Count) configurations, yielding 36 distinct test cases, each repeated 10 times for a total of 360 benchmark executions. Results were exported as both JSON and CSV for analysis.
+
+%----------------------------------------------------------------------
+\section{Results}
+\label{sec:results}
+
+\subsection{Scenario A: Baseline Rendering}
+
+Table~\ref{tab:scenario_a} shows the baseline performance for rendering a single rotating cube.
+
+\begin{table}[htbp]
+\caption{Scenario A --- Baseline Rendering (Single Cube)}
+\label{tab:scenario_a}
+\centering
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Metric} & \textbf{WebGL 2.0} & \textbf{WebGPU} \\
+\midrule
+Mean FPS & 1098.40 & 678.82 \\
+Std FPS ($\sigma$) & 27.95 & 51.51 \\
+Mean Frame Time (ms) & 0.91 & 1.48 \\
+P95 Frame Time (ms) & 2.02 & 2.54 \\
+Mean CPU Time (ms) & 0.12 & 0.37 \\
+Mean Init Time (ms) & 6.07 & 104.78 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+WebGL achieves 1.62$\times$ higher FPS than WebGPU in this minimal workload. The result reflects WebGPU's higher per-frame API overhead for command buffer creation and submission. WebGPU's initialization time is 17.3$\times$ larger due to adapter negotiation, device creation, and pipeline compilation.
+
+\subsection{Scenario B: Instanced Geometry Scaling}
+
+Fig.~\ref{fig:scenario_b_fps} and Table~\ref{tab:scenario_b} present the scaling results.
+
+\begin{table}[htbp]
+\caption{Scenario B --- Instanced Geometry Scaling (Mean FPS)}
+\label{tab:scenario_b}
+\centering
+\begin{tabular}{@{}rrrr@{}}
+\toprule
+\textbf{Count} & \textbf{WebGL} & \textbf{WebGPU} & \textbf{Ratio} \\
+\midrule
+100 & 816.84 & 640.63 & 0.78$\times$ \\
+500 & 313.07 & 506.49 & 1.62$\times$ \\
+1{,}000 & 162.69 & 380.71 & 2.34$\times$ \\
+5{,}000 & 106.74 & 225.59 & 2.11$\times$ \\
+10{,}000 & 110.41 & 182.53 & 1.65$\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=\columnwidth,
+    height=5cm,
+    xlabel={Instance Count},
+    ylabel={Mean FPS},
+    legend pos=north east,
+    legend style={font=\small},
+    grid=major,
+    xmode=log,
+    log basis x={10},
+    ymin=0,
+    xtick={100,500,1000,5000,10000},
+    xticklabels={100,500,1K,5K,10K},
+    mark size=2pt,
+    line width=1pt
+]
+\addplot[color=blue, mark=square*] coordinates {
+    (100, 816.84)
+    (500, 313.07)
+    (1000, 162.69)
+    (5000, 106.74)
+    (10000, 110.41)
+};
+\addlegendentry{WebGL 2.0}
+
+\addplot[color=red, mark=triangle*] coordinates {
+    (100, 640.63)
+    (500, 506.49)
+    (1000, 380.71)
+    (5000, 225.59)
+    (10000, 182.53)
+};
+\addlegendentry{WebGPU}
+\end{axis}
+\end{tikzpicture}
+\caption{Scenario B: Mean FPS vs. instance count (log scale). WebGPU overtakes WebGL beyond 200 instances and maintains a substantial advantage up to 10{,}000 instances.}
+\label{fig:scenario_b_fps}
+\end{figure}
+
+WebGPU surpasses WebGL at approximately 200 instances and maintains a 1.6--2.3$\times$ FPS advantage through 10{,}000 instances. The crossover occurs because WebGPU's per-instance buffer update overhead scales more efficiently than WebGL's per-instance attribute divisor updates. At 10{,}000 instances, WebGPU's CPU time (4.52~ms) is 45\% lower than WebGL's (8.25~ms).
+
+\subsection{Scenario C: Particle System}
+
+Table~\ref{tab:scenario_c} compares particle system performance.
+
+\begin{table}[htbp]
+\caption{Scenario C --- Particle System}
+\label{tab:scenario_c}
+\centering
+\begin{tabular}{@{}rrrr@{}}
+\toprule
+\textbf{Particles} & \textbf{WebGL FPS} & \textbf{WebGPU FPS} & \textbf{CPU (GL/GPU)} \\
+\midrule
+10{,}000 & 652.28 & 645.69 & 0.47 / 0.34 ms \\
+50{,}000 & 415.09 & 369.63 & 1.51 / 0.43 ms \\
+100{,}000 & 325.30 & 241.88 & 2.43 / 0.53 ms \\
+200{,}000 & 208.46 & 155.32 & 4.41 / 0.46 ms \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=\columnwidth,
+    height=5cm,
+    xlabel={Particle Count},
+    ylabel={Mean CPU Time (ms)},
+    legend pos=north west,
+    legend style={font=\small},
+    grid=major,
+    xmode=log,
+    log basis x={10},
+    ymin=0,
+    xtick={10000,50000,100000,200000},
+    xticklabels={10K,50K,100K,200K},
+    mark size=2pt,
+    line width=1pt
+]
+\addplot[color=blue, mark=square*] coordinates {
+    (10000, 0.47)
+    (50000, 1.51)
+    (100000, 2.43)
+    (200000, 4.41)
+};
+\addlegendentry{WebGL (CPU)}
+
+\addplot[color=red, mark=triangle*] coordinates {
+    (10000, 0.34)
+    (50000, 0.43)
+    (100000, 0.53)
+    (200000, 0.46)
+};
+\addlegendentry{WebGPU (GPU Compute)}
+\end{axis}
+\end{tikzpicture}
+\caption{Scenario C: CPU time scaling comparison. WebGL CPU time grows linearly with particle count ($O(n)$), while WebGPU compute shader overhead remains nearly constant ($<$0.6~ms).}
+\label{fig:scenario_c_cpu}
+\end{figure}
+
+While WebGL achieves higher raw FPS in this scenario (due to simpler overall frame submission), the CPU time data reveals the fundamental architectural difference. WebGL's CPU time scales linearly from 0.47~ms (10K particles) to 4.41~ms (200K particles) as the CPU must iterate over every particle. WebGPU's CPU time remains nearly constant at $\sim$0.46~ms regardless of particle count, as all physics computation occurs on the GPU via compute shaders. At 200{,}000 particles, WebGPU reduces CPU overhead by 89.6\%.
+
+\subsection{Scenario D: GPGPU Matrix Multiplication}
+
+Table~\ref{tab:scenario_d} shows compute performance.
+
+\begin{table}[htbp]
+\caption{Scenario D --- Matrix Multiplication Performance}
+\label{tab:scenario_d}
+\centering
+\begin{tabular}{@{}rcccc@{}}
+\toprule
+\textbf{Size} & \multicolumn{2}{c}{\textbf{Mean FPS}} & \multicolumn{2}{c}{\textbf{Init Time (ms)}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+ & \textbf{GL} & \textbf{GPU} & \textbf{GL} & \textbf{GPU} \\
+\midrule
+100 & 907.52 & 819.95 & 7.38 & 374.20 \\
+256 & 910.35 & 823.68 & 6.07 & 137.57 \\
+512 & 903.81 & 849.66 & 5.64 & 194.80 \\
+1024 & 910.36 & 804.36 & 4.83 & 180.31 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Both APIs achieve high FPS across all matrix sizes, with WebGL maintaining a slight edge (6--11\% higher FPS). This reflects the fact that both approaches fully offload computation to the GPU: WebGL through render-to-texture GPGPU, WebGPU through native compute shaders. The nearly identical FPS at high matrix sizes suggests that the workload is GPU-compute-bound rather than API-overhead-bound. However, WebGPU's initialization overhead is dramatically higher (up to 50.7$\times$ at size 100), primarily due to compute pipeline creation and shader module compilation.
+
+\subsection{Scenario E: State-Change Stress Test}
+
+Table~\ref{tab:scenario_e} reveals the most dramatic performance divergence.
+
+\begin{table}[htbp]
+\caption{Scenario E --- State-Change Stress Test}
+\label{tab:scenario_e}
+\centering
+\begin{tabular}{@{}rrrr@{}}
+\toprule
+\textbf{Objects} & \textbf{WebGL FPS} & \textbf{WebGPU FPS} & \textbf{Ratio} \\
+\midrule
+500 & 237.80 & 159.66 & 0.67$\times$ \\
+2{,}000 & 113.87 & 38.92 & 0.34$\times$ \\
+5{,}000 & 87.36 & 15.35 & 0.18$\times$ \\
+10{,}000 & 80.78 & 5.94 & 0.07$\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=\columnwidth,
+    height=5cm,
+    xlabel={Object Count},
+    ylabel={Mean FPS},
+    legend pos=north east,
+    legend style={font=\small},
+    grid=major,
+    xmode=log,
+    log basis x={10},
+    ymin=0, ymax=300,
+    xtick={500,2000,5000,10000},
+    xticklabels={500,2K,5K,10K},
+    mark size=2pt,
+    line width=1pt
+]
+\addplot[color=blue, mark=square*] coordinates {
+    (500, 237.80)
+    (2000, 113.87)
+    (5000, 87.36)
+    (10000, 80.78)
+};
+\addlegendentry{WebGL 2.0}
+
+\addplot[color=red, mark=triangle*] coordinates {
+    (500, 159.66)
+    (2000, 38.92)
+    (5000, 15.35)
+    (10000, 5.94)
+};
+\addlegendentry{WebGPU}
+\end{axis}
+\end{tikzpicture}
+\caption{Scenario E: Mean FPS under per-object state changes. WebGPU's performance degrades rapidly, falling to 5.94 FPS at 10{,}000 objects vs. WebGL's 80.78 FPS.}
+\label{fig:scenario_e}
+\end{figure}
+
+WebGPU exhibits severe performance degradation under high state-change workloads. At 10{,}000 objects, WebGPU achieves only 5.94~FPS with a mean frame time of 168.65~ms, compared to WebGL's 80.78~FPS and 12.38~ms frame time---a 13.6$\times$ performance gap. WebGPU's P95 frame time reaches 207.31~ms, far exceeding interactive thresholds. The high standard deviation in WebGPU's results ($\sigma_{\text{FPS}} = 83.68$ at 500 objects) also indicates significant frame-time instability.
+
+\subsection{Initialization Time Comparison}
+
+\begin{table}[htbp]
+\caption{Mean Initialization Time (ms) Across Scenarios}
+\label{tab:init_time}
+\centering
+\begin{tabular}{@{}lrr@{}}
+\toprule
+\textbf{Scenario} & \textbf{WebGL} & \textbf{WebGPU} \\
+\midrule
+A (Baseline) & 6.07 & 104.78 \\
+B (1{,}000 inst.) & 8.86 & 303.02 \\
+C (100K part.) & 12.62 & 149.12 \\
+D (512 matmul) & 5.64 & 194.80 \\
+E (5{,}000 obj.) & 6.72 & 1{,}439.14 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+WebGPU's initialization time is consistently one to three orders of magnitude higher than WebGL's. This is attributable to WebGPU's explicit resource creation model: adapter enumeration, device negotiation, shader module compilation, and pipeline state object creation all occur during initialization. Scenario~E at 10{,}000 objects incurs a 3{,}250.75~ms WebGPU initialization time---over 3 seconds---due to the creation of individual bind groups per object.
+
+%----------------------------------------------------------------------
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{When WebGPU Excels}
+
+Our results identify two primary conditions under which WebGPU provides clear advantages:
+
+\textbf{1) Instanced rendering at scale (Scenario B)}: When the number of rendered instances exceeds approximately 200, WebGPU's pre-compiled pipeline and efficient instance buffer management yield significantly higher throughput (up to 2.34$\times$ FPS). This advantage makes WebGPU compelling for applications rendering large 3D scenes, such as architectural visualization, terrain rendering, and particle-heavy effects using instanced geometry.
+
+\textbf{2) GPU-side data-parallel computation (Scenario C)}: WebGPU's native compute shaders entirely offload particle physics to the GPU, keeping CPU overhead constant at $\sim$0.5~ms regardless of particle count. This frees the main thread for other tasks (UI updates, network requests, application logic). For applications requiring large-scale simulations (fluid dynamics, molecular visualization, machine learning inference in the browser), this represents a qualitative, not merely quantitative, advantage.
+
+\subsection{When WebGL Remains Competitive}
+
+\textbf{1) Low-complexity rendering (Scenario A)}: For simple scenes with few draw calls, WebGL's lower per-frame overhead and mature driver optimization yield superior FPS. Applications such as product configurators or basic data visualizations with limited geometry may not benefit from WebGPU.
+
+\textbf{2) State-change-heavy rendering (Scenario E)}: WebGL significantly outperforms WebGPU when each object requires unique pipeline state (unique uniforms, separate draw calls). This pattern is common in applications that cannot use instancing---for example, scenes with heterogeneous objects requiring different materials, blend states, or shader programs.
+
+\textbf{3) GPU-bound compute workloads (Scenario D)}: When the workload is purely GPU-compute-bound, both APIs achieve similar throughput, as the GPU is the bottleneck rather than the API. WebGL's render-to-texture GPGPU approach, while less elegant, performs comparably.
+
+\subsection{Initialization Overhead}
+
+WebGPU's high initialization latency (Table~\ref{tab:init_time}) has practical implications for application startup time and dynamic resource creation. Applications that frequently create or modify pipelines, bind groups, or shader modules will incur noticeable delays. Strategies to mitigate this include pipeline caching, lazy initialization, and precompilation of commonly used shader modules. WebGPU implementations are also expected to improve initialization performance as browser engines mature.
+
+\subsection{State-Change Pattern Analysis}
+
+The severe WebGPU degradation in Scenario~E warrants deeper analysis. In our WebGPU implementation, each object requires updating a distinct bind group to modify its model-view matrix and color uniform. This results in $N$ \texttt{setBindGroup} and $N$ \texttt{drawIndexed} calls per frame. The overhead likely stems from WebGPU's validation layer, which must verify bind group compatibility with the pipeline layout on every \texttt{setBindGroup} call. This is a known limitation of the current WebGPU specification and browser implementations.
+
+Developers can mitigate this by employing dynamic uniform buffers, dynamic offsets into a single large uniform buffer, or indirect rendering with compute-shader-driven scene management. Reducing the number of unique bind groups per frame is critical for WebGPU performance.
+
+\subsection{Threats to Validity}
+
+Several factors may influence the generalizability of our results:
+
+\begin{itemize}
+    \item \textbf{Browser and driver maturity}: WebGPU is a nascent standard with rapidly evolving browser implementations. Performance characteristics may change significantly across browser versions.
+    \item \textbf{Headless rendering}: Benchmarks were run in headless Chromium, which may differ from windowed rendering in display composition overhead.
+    \item \textbf{Single hardware configuration}: Results are specific to one GPU/driver combination. Different hardware (especially integrated vs. discrete GPUs, mobile vs. desktop) may show different scaling behavior.
+    \item \textbf{Implementation choices}: The Scenario~E WebGPU implementation uses per-object bind groups, which represents a worst-case pattern. Optimized implementations using dynamic uniform buffers could reduce the performance gap.
+\end{itemize}
+
+%----------------------------------------------------------------------
+\section{Conclusion and Future Work}
+\label{sec:conclusion}
+
+This paper presents the first comprehensive, automated benchmarking comparison between WebGL~2.0 and WebGPU across five distinct rendering and compute scenarios. Our key findings are:
+
+\begin{enumerate}
+    \item WebGPU achieves up to \textbf{2.34$\times$} higher FPS for instanced rendering workloads, making it the superior choice for geometry-intensive applications.
+    \item WebGPU's compute shaders reduce CPU overhead by up to \textbf{89.6\%} compared to WebGL's CPU-based particle simulation, enabling larger data-parallel workloads without blocking the main thread.
+    \item WebGL remains significantly faster for \textbf{state-change-heavy} rendering patterns, achieving 13.6$\times$ higher FPS than WebGPU at 10{,}000 per-object draw calls.
+    \item WebGPU incurs \textbf{17--384$\times$} higher initialization overhead, impacting application startup time.
+    \item For GPU-bound compute workloads, both APIs achieve comparable throughput, indicating that the performance difference is primarily in API overhead rather than GPU utilization.
+\end{enumerate}
+
+These results provide empirically grounded guidance for web developers. We recommend WebGPU for new applications with instanced rendering, GPU compute requirements, or large-scale particle simulations. Applications with many heterogeneous objects requiring individual draw calls should carefully evaluate the state-change overhead before migrating from WebGL.
+
+Future work includes: (1) extending benchmarks to mobile browser platforms, (2) evaluating optimized WebGPU patterns (dynamic uniform buffers, indirect drawing) for state-change-heavy workloads, (3) comparing multi-threaded command encoding strategies, (4) tracking performance evolution across browser releases, and (5) incorporating additional benchmark scenarios such as shadow mapping, deferred rendering, and post-processing pipelines.
+
+\section*{Acknowledgments}
+
+The benchmarking framework is open-source and available for reproducibility. All experimental data, including raw JSON and CSV results, are included in the repository.
+
+%----------------------------------------------------------------------
+% References
+%----------------------------------------------------------------------
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\balance
+
+\end{document}
